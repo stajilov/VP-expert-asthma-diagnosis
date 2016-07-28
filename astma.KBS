@@ -1,0 +1,251 @@
+! Diagnozirovania
+ACTIONS
+DISPLAY "Diagnozirovanie bronhalinoi astmi"
+FIND astma
+FIND etiologia
+FIND tiajesti
+FIND dipropionat_beklametazona
+FIND budesonid
+FIND flunezolid
+FIND proianat_fluktikazona
+FIND acetonid_triamsinolona
+
+DISPLAY "Bronhalinaia asma: U vas {#astma}"
+DISPLAY  "Etiologia: {#etiologia}"
+DISPLAY  "Stepeni tiajesti: {#tiajesti}~"
+DISPLAY "Lecenie:"
+DISPLAY "Dipropionat_beklametazona {#dipropionat_beklametazona}"
+DISPLAY "budesonid {#budesonid}"
+DISPLAY "flunezolid {#flunezolid}"
+DISPLAY "proianat_fluktikazona {#proianat_fluktikazona}"
+DISPLAY "acetonid_triamsinolona {#acetonid_triamsinolona}"
+
+DISPLAY "Please press any key to continue.";
+
+RULE 1
+IF svistiasie_hripi = yes
+or kasheli_noci = yes
+or kasheli_posle_nagruzki = yes
+or kasheli_posle_razdrajitelei = yes
+or infectii_vniz = yes
+or menishe_jalob = no
+THEN astma = vozmojna CNF 30;
+
+RULE 2
+IF svistiasie_hripi = yes
+AND kasheli_noci = yes
+AND kasheli_posle_nagruzki = yes
+AND kasheli_posle_razdrajitelei = yes
+AND infectii_vniz = yes
+AND menishe_jalob = no
+THEN astma = prakticeski_uvereni CNF 90
+BECAUSE "Vse simptomi";
+
+RULE 3
+IF eozinofili = yes
+THEN astma = prakticeski_uvereni CNF 90
+BECAUSE "Analiz makroti daiot vse osnovania tak polagati";
+
+
+RULE 4
+IF eozinofili = yes
+AND alergia_na_kozje = yes
+THEN astma = uvereni CNF 98
+BECAUSE "Analiz makroti daiot vse osnovania tak polagati i test na alergiu podtverjdaet";
+
+
+RULE 5
+IF svistiasie_hripi = no
+AND kasheli_noci = no
+AND kasheli_posle_nagruzki = no
+AND kasheli_posle_razdrajitelei = no
+AND infectii_vniz = no
+AND menishe_jalob = yes
+THEN astma = net_astmi CNF 0;
+
+
+!etilogia
+RULE 6
+IF provoc_factor = pilica
+or provoc_factor = gribki
+or provoc_factor = pili_dome
+THEN etiologia = ekzogenaia CNF 75;
+
+!etilogia
+RULE 7
+IF provoc_factor = fiz_nagruzka
+or provoc_factor = holodnii_vozduh
+or provoc_factor = infectia
+or provoc_factor = psihoemotionalinie_razdrajiteli
+THEN etiologia = endogenaia CNF 75;
+
+!etilogia
+RULE 8
+IF provoc_factor = nekotoroe_iz_visheperecislenoe
+THEN etiologia = smeshanii_genez CNF 75;
+
+
+!Stratificatia
+
+RULE 9
+IF chastota_simptomov = menee_raza_v_nedeliu
+AND chastota_nocinih_simptomov = dva_raza_v_mesiac
+AND fiziceskaia_activnosti = korotkie_pristupu
+THEN tiajesti = 4;
+
+RULE 10
+IF chastota_simptomov = ciase_cem_raz_v_nedeliu
+AND chastota_nocinih_simptomov = bolee_cem_dva_v_mesiac
+AND fiziceskaia_activnosti = narushaiut_son
+THEN tiajesti = 3;
+
+
+!OR potomu chto esli odin esli vstrecaetsia odin iz takih priznakov eto signal cto zabolevanie tiajeloe
+RULE 11
+IF chastota_simptomov = pociti_ejednevno
+OR chastota_nocinih_simptomov = pociti_ejednedelino
+OR fiziceskaia_activnosti =  pristupi_snujauit
+THEN tiajesti = 2;
+
+RULE 12
+IF chastota_simptomov = ejednevno
+OR chastota_nocinih_simptomov = oceni_casto
+OR fiziceskaia_activnosti =  zatrudnena
+THEN tiajesti = 1;
+
+
+!Tratament - medicamenti
+
+RULE 13
+IF tiajesti = 4
+THEN dipropionat_beklametazona = 250;
+
+RULE 14
+IF tiajesti = 4
+THEN budesonid = 200;
+
+RULE 15
+IF tiajesti = 4
+THEN flunezolid = 500;
+
+RULE 16
+IF tiajesti = 4
+THEN proianat_fluktikazona = 125;
+
+RULE 17
+IF tiajesti = 4
+THEN acetonid_triamsinolona = 500;
+
+
+
+RULE 18
+IF tiajesti = 3
+THEN dipropionat_beklametazona = 500;
+
+RULE 19
+IF tiajesti = 3
+THEN budesonid = 400;
+
+RULE 20
+IF tiajesti = 3
+THEN flunezolid = 1000;
+
+RULE 21
+IF tiajesti = 3
+THEN proianat_fluktikazona = 250;
+
+RULE 22
+IF tiajesti = 3
+THEN acetonid_triamsinolona = 1000;
+
+
+RULE 23
+IF tiajesti = 2
+THEN dipropionat_beklametazona = 750;
+
+RULE 24
+IF tiajesti = 2
+THEN budesonid = 600;
+
+RULE 25
+IF tiajesti = 2
+THEN flunezolid = 1500;
+
+RULE 26
+IF tiajesti = 2
+THEN proianat_fluktikazona = 375;
+
+RULE 27
+IF tiajesti = 2
+THEN acetonid_triamsinolona = 1500;
+
+
+
+RULE 28
+IF tiajesti = 1
+THEN dipropionat_beklametazona = 1000;
+
+RULE 29
+IF tiajesti = 1
+THEN budesonid = 800;
+
+RULE 30
+IF tiajesti = 1
+THEN flunezolid = 2000;
+
+RULE 31
+IF tiajesti = 1
+THEN proianat_fluktikazona = 500;
+
+RULE 32
+IF tiajesti = 1
+THEN acetonid_triamsinolona = 2000;
+
+
+
+
+!ASK TO SET DIAGNOZ - KLINICESKAYA KARTINA
+ASK svistiasie_hripi: "STAVIM KLINICHESKUIU KARTINU: Voznikayut svistyashie hripi?";
+CHOICES svistiasie_hripi: yes, no;
+
+ASK kasheli_noci: "Kasheli po nocam?";
+CHOICES kasheli_noci: yes, no;
+
+ASK kasheli_posle_nagruzki: "Kasheli posle nagruzki?";
+CHOICES kasheli_posle_nagruzki: yes, no;
+
+ASK kasheli_posle_razdrajitelei: "Kasheli ili hripi posle stolknovenia s alergenami?";
+CHOICES kasheli_posle_razdrajitelei: yes, no;
+
+ASK infectii_vniz: "Infectii perehodiat na nijnie dihatelinie puti cerez 10 dnei?";
+CHOICES infectii_vniz: yes, no;
+
+ASK menishe_jalob: "Menishe jalob cerez 10 dnei posle priema alergikov?";
+CHOICES menishe_jalob: yes, no, none;
+
+ASK eozinofili: "Bolishoe kol-vo eozinofilov v morkote ili ecstracte?";
+CHOICES eozinofili: yes, no;
+
+ASK alergia_na_kozhe: "Alergia na koje?";
+CHOICES alergia_na_kozje: yes, no;
+
+
+
+
+ASK provoc_factor: "Cto provociruet?";
+CHOICES provoc_factor: pilica, gribki, sersti, pili_dome, infectia, fiz_nagruzka, holodnii_vozduh, psihoemotionalinie_razdrajiteli, nekotoroe_iz_visheperecislenoe;
+
+
+
+
+ASK chastota_simptomov: "Kak chasto dnevnie simptomi?";
+CHOICES chastota_simptomov: menee_raza_v_nedeliu, ciase_cem_raz_v_nedeliu, pociti_ejednevno, ejednevno;
+
+ASK chastota_nocinih_simptomov: "Kak chasto nocinie simptomi?";
+CHOICES chastota_nocinih_simptomov: dva_raza_v_mesiac, bolee_cem_dva_v_mesiac, pociti_ejednedelino, oceni_casto;
+
+ASK fiziceskaia_activnosti: "Viziceskaua aktivnosti zatrudnena?";
+CHOICES fiziceskaia_activnosti: korotkie_pristupu, narushaiut_son, pristupi_snujauit, zatrudnena;
+
+
+
